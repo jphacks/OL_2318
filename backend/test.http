@@ -1,0 +1,76 @@
+###
+POST http://localhost:3000/user_add
+Content-Type: application/json
+
+{
+    "user_name" : "1234"
+}
+###
+POST http://localhost:3000/group_add
+Content-Type: application/json
+
+{
+    "group_name" : "group"
+}
+###
+
+POST http://localhost:3000/group_add
+Content-Type: application/json
+
+{
+    "group_name" : "group",
+    "detail" : "教養科目2"
+}
+
+###
+
+GET http://localhost:3000/groups
+Content-Type: application/json
+
+{
+    "user_id" : "2"
+}
+
+###
+
+
+POST http://localhost:3000/join_group
+Content-Type: application/json
+
+{
+    "user_id" : "2",
+    "group_id" : "2"
+}
+
+###
+
+POST http://localhost:3000/todo_add
+Content-Type: application/json
+
+{
+    "group_id" : "2",
+    "name": "テスTodo",
+    "content" : "明日までに開発を終わらせる"
+}
+
+###
+POST http://localhost:3000/todo_add
+Content-Type: application/json
+
+{
+    "group_id" : "2",
+    "name": "テスTodo",
+    "content" : "ピッチ資料作成",
+    "deadline" : "2023-10-29 00:00:00"
+}
+
+###
+POST http://localhost:3000/update_todo_global/
+Content-Type: application/json
+
+{
+    "todo_id" : "2",
+    "deadline" : "2023-10-29 14:00:00"
+}
+
+###
