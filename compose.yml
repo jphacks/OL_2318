@@ -9,6 +9,8 @@ services:
       - ./backend:/usr/src/app/backend
     ports:
       - 3000:3000
+    env_file:
+      - ./.env
     working_dir: /usr/src/app/backend
     command: bash -c "npm i && npm run dev"
 
