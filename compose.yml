@@ -1,0 +1,15 @@
+version: '3'
+services:
+  frontend: 
+    image: ruby:2.3.1
+
+  backend:
+    image: node:latest
+    volumes:
+      - ./backend:/usr/src/app/backend
+    ports:
+      - 3000:3000
+    working_dir: /usr/src/app/backend
+    command: bash -c "npm i && npm run dev"
+
+
