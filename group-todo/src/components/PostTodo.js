@@ -4,7 +4,7 @@
 import React from 'react';
 import { useState } from 'react';
 
-export const AddTodo = () => {
+export const PostTodo = () => {
     const [name, setName] = useState('');
     const [content, setContent] = useState('');
     const [deadline, setDeadline] = useState('');
@@ -65,4 +65,4 @@ export const AddTodo = () => {
       )
     };
     
-    export default AddTodo;
+    export default PostTodo;

@@ -1,8 +1,7 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Home from './components/Home';
-import Login from './components/Login';
-import Register from './components/Register';
+import PostUserForm from './components/PostUserForm';
 import Dashboard from './components/Dashboard';
 
 
@@ -16,10 +15,7 @@ function App() {
               <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="/login">Login</Link>
-            </li>
-            <li>
-              <Link to="/register">Register</Link>
+              <Link to="/register">ユーザー登録</Link>
             </li>
             <li>
               <Link to="/dashboard">Dashboard</Link>
@@ -29,8 +25,7 @@ function App() {
 
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/register" element={<PostUserForm />} />
           <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </div>
