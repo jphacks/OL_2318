@@ -13,7 +13,17 @@ export default function ToDoItemList() {
     };
     const todos = async () => {
       const res = await getLocalTodo(user_id);
-      setTodos(res);
+      const ret = [];
+      const map = new Set<number>();
+      for (const todo of res) {
+        if (todo.todo_id == null) continue;
+        if (map.has(todo.todo_id)) {
+          continue;
+        }
+        map.add(todo.todo_id);
+        ret.push(todo);
+      }
+      setTodos(ret);
     };
     groups();
     todos();
