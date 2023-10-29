@@ -10,7 +10,7 @@ POST http://localhost:3000/group_add
 Content-Type: application/json
 
 {
-    "group_name" : "group"
+    "group_name" : "テストグループ"
 }
 ###
 
@@ -39,7 +39,7 @@ Content-Type: application/json
 
 {
     "user_id" : "2",
-    "group_id" : "2"
+    "group_id" : "11"
 }
 
 ###
