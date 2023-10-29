@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS `user_group`;
 ---- create ----
 create table IF not exists `group_table`
 (
- `group_id`               INT(20) AUTO_INCREMENT,
+ `group_id`               INT(20) AUTO_INCREMENT UNIQUE,
  `name`             VARCHAR(20) NOT NULL,
  `detail`           VARCHAR(2000) ,
     PRIMARY KEY (`group_id`)
@@ -17,14 +17,14 @@ create table IF not exists `group_table`
 
 create table IF not exists `users`
 (
- `user_id`               INT(20) AUTO_INCREMENT,
+ `user_id`                INT(20) AUTO_INCREMENT UNIQUE,
  `user_name`             VARCHAR(20) NOT NULL,
     PRIMARY KEY (`user_id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 create table IF not exists `todos`
 (
- `todo_id`               INT(20) AUTO_INCREMENT,
+ `todo_id`               INT(20) AUTO_INCREMENT UNIQUE,
  `group_id`               INT(20) NOT NULL,
  `name`             VARCHAR(20) NOT NULL,
  `content`           VARCHAR(2000) ,
