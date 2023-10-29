@@ -143,6 +143,7 @@ app.post("/get_todo_local/", async (req: Request, res: Response) => {
 
     const id_mapping = new Set<number>();
     rows_result.forEach((row) => {
+      console.log(row.todo_id);
       id_mapping.add(row.todo_id!);
     });
 
@@ -150,7 +151,8 @@ app.post("/get_todo_local/", async (req: Request, res: Response) => {
     const rows_result2 = rows2 as unknown[] as Todo[];
     // user_todoにinsert
     for (const row of rows_result2) {
-      if (!id_mapping.has(row.todo_id!)) {
+      if (row.todo_id && !id_mapping.has(row.todo_id)) {
+        console.log(row.todo_id, "is not in ", id_mapping);
         await connection.execute(
           "INSERT INTO user_todo (user_id, todo_id, is_done) VALUES (?, ?, ?)",
           [body.user_id, row.todo_id, false]

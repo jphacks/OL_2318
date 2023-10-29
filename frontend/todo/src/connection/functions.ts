@@ -86,3 +86,27 @@ export const getLocalTodo = async (user_id: string): Promise<Todo[]> => {
   console.log(data);
   return data as Todo[];
 };
+
+export const todo_add = async (
+  group_id: string,
+  name: string,
+  content: string,
+  deadline?: Date
+): Promise<void> => {
+  const res = await fetch(`/backend/todo_add`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      group_id: group_id,
+      name: name,
+      content: content,
+      deadline: deadline,
+    }),
+  });
+  if (res.status !== 200) {
+    throw new Error("Error: todo_add");
+  }
+  return;
+};

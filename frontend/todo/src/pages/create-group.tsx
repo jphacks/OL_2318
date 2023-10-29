@@ -1,17 +1,23 @@
 import { createGroup, joinGroup } from "@/connection/functions";
+import { group } from "console";
 import React from "react";
 
 export default function CreateGroup() {
   const handler = async () => {
     console.log("create group");
-    const group_name = (
-      document.getElementById("group_create_name") as HTMLInputElement
-    ).value;
-    const detail = (document.getElementById("group_detail") as HTMLInputElement)
-      .value;
+    const group_create_name = document.getElementById(
+      "group_create_name"
+    ) as HTMLInputElement;
+    const group_name = group_create_name.value;
+    const group_detail = document.getElementById(
+      "group_detail"
+    ) as HTMLInputElement;
+    const detail = group_detail.value;
     const groupId = await createGroup(group_name, detail);
     console.log(groupId);
     joinGroup(localStorage.getItem("user_id") ?? "", groupId);
+    group_create_name.value = "";
+    group_detail.value = "";
   };
 
   return (

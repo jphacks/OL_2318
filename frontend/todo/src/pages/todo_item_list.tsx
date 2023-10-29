@@ -30,8 +30,8 @@ export default function ToDoItemList() {
           );
         })}
       </div>
-      <div>
-        現在のToDo
+      現在のToDo
+      <div className="flex flex-wrap">
         {todos.map((todo) => {
           return <TodoItem item={todo} key={todo.todo_id}></TodoItem>;
         })}
