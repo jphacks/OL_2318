@@ -33,7 +33,6 @@ slackのように新規ユーザーやグループの作成をすることがで
 
 #### フレームワーク・ライブラリ・モジュール
 * node.js (TypeScript)
-* React.js
 * Next.js
 * MySQL
 * Docker
