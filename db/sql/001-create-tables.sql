@@ -37,7 +37,7 @@ create table IF not exists `user_todo`
     `user_id`               INT(20) NOT NULL,
     `todo_id`               INT(20) NOT NULL,
     `is_done`               BOOLEAN NOT NULL,
-        PRIMARY KEY (`todo_id`,`user_id`)
+    PRIMARY KEY (`todo_id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 create table IF not exists `user_group`
