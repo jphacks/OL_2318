@@ -359,7 +359,7 @@ app.post("/update_todo_local/", async (req: Request, res: Response) => {
     await connection.beginTransaction();
 
     await connection.execute(
-      "UPDATE user_todo SET status = ? WHERE todo_id = ? AND user_id = ?",
+      "UPDATE user_todo SET is_done = ? WHERE todo_id = ? AND user_id = ?",
       [body.status, body.todo_id, body.user_id]
     );
     await connection.commit();
