@@ -45,7 +45,10 @@ export const addUser = async (user_name: string): Promise<string> => {
   return ret;
 };
 
-export const createGroup = async (group_name: string, detail?: string) => {
+export const createGroup = async (
+  group_name: string,
+  detail?: string
+): Promise<string> => {
   const res = await fetch(`/backend/group_add`, {
     method: "POST",
     headers: {

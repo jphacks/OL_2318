@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { getGroups, getLocalTodo, Group, Todo } from "@/connection/functions";
 import { TodoItem } from "./todo_item";
+
 export default function ToDoItemList() {
   const [groups, setGroups] = React.useState<Group[]>([]);
   const [todos, setTodos] = React.useState<Todo[]>([]);
@@ -23,7 +24,7 @@ export default function ToDoItemList() {
         参加しているグループ
         {groups.map((group) => {
           return (
-            <div key={group.group_id}>
+            <div key={`group_${group.group_id}`}>
               {group.name} : {group.detail ?? ""}
             </div>
           );
@@ -32,12 +33,7 @@ export default function ToDoItemList() {
       <div>
         現在のToDo
         {todos.map((todo) => {
-          return (
-            <TodoItem
-              item={todo}
-              key={todo.todo_id ?? 1 * todo.group_id}
-            ></TodoItem>
-          );
+          return <TodoItem item={todo} key={todo.todo_id}></TodoItem>;
         })}
       </div>
     </div>

@@ -11,6 +11,7 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 import ToDoItemList from "@/pages/todo_item_list";
+import CreateGroup from "./create-group";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -40,23 +41,7 @@ export default function Home() {
         >
           Update ToDo List{" "}
         </button>
-        <div>
-          <form>
-            <input type="text" name="group_name" id="group_create_name" />
-            <button
-              onClick={() => {
-                const group_name = (
-                  document.getElementById(
-                    "group_create_name"
-                  ) as HTMLInputElement
-                ).value;
-                createGroup(group_name);
-              }}
-            >
-              Create Group
-            </button>
-          </form>
-        </div>
+        <CreateGroup />
         <button
           onClick={async () => {
             joinGroup(localStorage.getItem("user_id") ?? "", "2");
