@@ -33,7 +33,7 @@ const db_setting = {
 };
 
 app.listen(3000, () => {
-  console.log("Start on port 3000.");
+  //console.log("Start on port 3000.");
 });
 
 app.get("/", (req: Request, res: Response) => {
@@ -60,7 +60,7 @@ app.post("/groups/", async (req: Request, res: Response) => {
     }[];
 
     const group_ids = rows_result.map((row) => row.group_id);
-    console.log(group_ids);
+    //console.log(group_ids);
     let groups: Group[] = [];
     for (const group_id of group_ids) {
       const [rows2, fields2] = await connection.execute(
@@ -74,13 +74,13 @@ app.post("/groups/", async (req: Request, res: Response) => {
       }[];
       groups.push(...rows_result2);
     }
-    console.log(groups);
+    //console.log(groups);
     res.json(groups);
     res.statusCode = 200;
   } catch (err) {
     res.statusCode = 400;
     res.json({ message: err });
-    console.log(err);
+    //console.log(err);
   } finally {
     connection?.end();
   }
@@ -108,7 +108,7 @@ app.post("/get_todo_group/", async (req: Request, res: Response) => {
   } catch (err) {
     res.statusCode = 400;
     res.json({ message: err });
-    console.log(err);
+    //console.log(err);
   } finally {
     connection?.end();
   }
@@ -143,11 +143,11 @@ app.post("/get_todo_local/", async (req: Request, res: Response) => {
 
     const id_mapping = new Set<number>();
     rows_result.forEach((row) => {
-      console.log(row.todo_id);
+      //console.log(row.todo_id);
       id_mapping.add(row.todo_id!);
     });
 
-    console.log(rows2);
+    //console.log("row2", rows2);
     const rows_result2 = rows2 as unknown[] as Todo[];
     // user_todoにinsert
     for (const row of rows_result2) {
@@ -157,6 +157,8 @@ app.post("/get_todo_local/", async (req: Request, res: Response) => {
           "INSERT INTO user_todo (user_id, todo_id, is_done) VALUES (?, ?, ?)",
           [body.user_id, row.todo_id, false]
         );
+        id_mapping.add(row.todo_id);
+        console.log(id_mapping);
       }
     }
 
@@ -173,7 +175,7 @@ app.post("/get_todo_local/", async (req: Request, res: Response) => {
     connection?.rollback();
     res.statusCode = 400;
     res.json({ message: err });
-    console.log(err);
+    //console.log(err);
   } finally {
     connection?.end();
   }
@@ -203,7 +205,7 @@ app.post("/todo_detail/", async (req: Request, res: Response) => {
   } catch (err) {
     res.statusCode = 400;
     res.json({ message: err });
-    console.log(err);
+    //console.log(err);
     connection?.rollback();
   } finally {
     connection?.end();
@@ -229,7 +231,7 @@ app.post("/user_add/", async (req: Request, res: Response) => {
     await connection?.rollback();
     res.statusCode = 400;
     res.json({ message: err });
-    console.log(err);
+    //console.log(err);
   } finally {
     connection?.end();
   }
@@ -255,7 +257,7 @@ app.post("/group_add/", async (req: Request, res: Response) => {
     await connection?.rollback();
     res.statusCode = 400;
     res.json({ message: err });
-    console.log(err);
+    //console.log(err);
   } finally {
     connection?.end();
   }
@@ -265,7 +267,7 @@ app.post("/join_group/", async (req: Request, res: Response) => {
   let connection: mysql.Connection | undefined;
   try {
     const body = req.body as { user_id: number; group_id: number };
-    console.log(body);
+    //console.log(body);
     connection = await mysql.createConnection(db_setting);
     await connection.beginTransaction();
     await connection.execute(
@@ -279,7 +281,7 @@ app.post("/join_group/", async (req: Request, res: Response) => {
     await connection?.rollback();
     res.statusCode = 400;
     res.json({ message: err });
-    console.log(err);
+    //console.log(err);
   } finally {
     connection?.end();
   }
@@ -302,7 +304,7 @@ app.post("/todo_add/", async (req: Request, res: Response) => {
     await connection?.rollback();
     res.statusCode = 400;
     res.json({ message: err });
-    console.log(err);
+    //console.log(err);
   } finally {
     connection?.end();
   }
@@ -312,7 +314,7 @@ app.post("/update_todo_global/", async (req: Request, res: Response) => {
   let connection: mysql.Connection | undefined;
   try {
     const body = req.body as Todo;
-    console.log(body);
+    //console.log(body);
     connection = await mysql.createConnection(db_setting);
     await connection.beginTransaction();
     if (body.name != null) {
@@ -341,7 +343,7 @@ app.post("/update_todo_global/", async (req: Request, res: Response) => {
     await connection?.rollback();
     res.statusCode = 400;
     res.json({ message: err });
-    console.log(err);
+    //console.log(err);
   } finally {
     connection?.end();
   }
@@ -369,7 +371,7 @@ app.post("/update_todo_local/", async (req: Request, res: Response) => {
     await connection?.rollback();
     res.statusCode = 400;
     res.json({ message: err });
-    console.log(err);
+    //console.log(err);
   } finally {
     connection?.end();
   }

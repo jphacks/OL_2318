@@ -19,11 +19,16 @@ export default function Home() {
 
   const fetchTodoItems = async () => {
     if (session) {
-      if (localStorage.getItem("user_id") == null) {
+      if (
+        localStorage.getItem("user_id") == null ||
+        localStorage.getItem("user_id") == ""
+      ) {
         const add_user = await addUser(session.user?.name ?? "");
         localStorage.setItem("user_id", add_user);
+        console.log("add user", add_user);
       }
       const user_id = localStorage.getItem("user_id") ?? "";
+      console.log(user_id);
       const groups = await getGroups(user_id);
     }
   };

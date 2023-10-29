@@ -1,8 +1,10 @@
 import { createGroup, joinGroup } from "@/connection/functions";
 import { group } from "console";
 import React from "react";
+import Router, { useRouter } from "next/router";
 
 export default function CreateGroup() {
+  const router = useRouter();
   const handler = async () => {
     console.log("create group");
     const group_create_name = document.getElementById(
@@ -45,6 +47,7 @@ export default function CreateGroup() {
           type="button"
           onClick={async () => {
             await handler();
+            router.reload();
           }}
         >
           グループを作成

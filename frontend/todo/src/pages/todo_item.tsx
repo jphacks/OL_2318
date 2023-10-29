@@ -1,12 +1,23 @@
 import React from "react";
 import { useSession } from "next-auth/react";
-import { Todo } from "@/connection/functions";
+import { Todo, update_todo_local } from "@/connection/functions";
+import Router, { useRouter } from "next/router";
 
 type Props = {
   item: Todo;
+  user_id: string;
 };
 
-export const TodoItem: React.FC<Props> = ({ item }) => {
+export const TodoItem: React.FC<Props> = ({ item, user_id }) => {
+  const router = useRouter();
+  const todo_id = item.todo_id;
+  const updateStatus = async () => {
+    if (todo_id == null) {
+      return;
+    }
+    const res = update_todo_local(todo_id.toString(), user_id, true);
+    item.is_done = true;
+  };
   const { data: session } = useSession();
   if (session) {
     if (item.is_done == true) {
@@ -23,7 +34,18 @@ export const TodoItem: React.FC<Props> = ({ item }) => {
         ) : (
           <></>
         )}
-        <button>完了にする</button>
+        <button
+          type="submit"
+          onClick={async () => {
+            const result = confirm("完了にしますか？");
+            if (result) {
+              await updateStatus();
+            }
+            router.reload();
+          }}
+        >
+          完了にする
+        </button>
       </div>
     );
   } else {

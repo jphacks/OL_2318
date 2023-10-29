@@ -110,3 +110,25 @@ export const todo_add = async (
   }
   return;
 };
+
+export const update_todo_local = async (
+  todo_id: string,
+  user_id: string,
+  status: boolean
+): Promise<void> => {
+  const res = await fetch(`/backend/update_todo_local`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      todo_id: todo_id,
+      user_id: user_id,
+      status: status,
+    }),
+  });
+  if (res.status !== 200) {
+    throw new Error("Error: todo_add");
+  }
+  return;
+};

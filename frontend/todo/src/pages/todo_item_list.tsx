@@ -5,13 +5,14 @@ import { TodoItem } from "./todo_item";
 export default function ToDoItemList() {
   const [groups, setGroups] = React.useState<Group[]>([]);
   const [todos, setTodos] = React.useState<Todo[]>([]);
+  const user_id = localStorage.getItem("user_id") ?? "";
   useEffect(() => {
     const groups = async () => {
-      const res = await getGroups(localStorage.getItem("user_id") ?? "");
+      const res = await getGroups(user_id);
       setGroups(res);
     };
     const todos = async () => {
-      const res = await getLocalTodo(localStorage.getItem("user_id") ?? "");
+      const res = await getLocalTodo(user_id);
       setTodos(res);
     };
     groups();
@@ -33,7 +34,13 @@ export default function ToDoItemList() {
       現在のToDo
       <div className="flex flex-wrap">
         {todos.map((todo) => {
-          return <TodoItem item={todo} key={todo.todo_id}></TodoItem>;
+          return (
+            <TodoItem
+              item={todo}
+              user_id={user_id}
+              key={`${user_id}::${todo.todo_id}`}
+            ></TodoItem>
+          );
         })}
       </div>
     </div>

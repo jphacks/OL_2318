@@ -34,10 +34,11 @@ create table IF not exists `todos`
 
 create table IF not exists `user_todo`
 (
+    `id`              INT(20) AUTO_INCREMENT,
     `user_id`               INT(20) NOT NULL,
     `todo_id`               INT(20) NOT NULL,
     `is_done`               BOOLEAN NOT NULL,
-    PRIMARY KEY (`todo_id`)
+    PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 create table IF not exists `user_group`
