@@ -22,6 +22,7 @@ type Todo = {
   name?: string;
   content?: string;
   deadline?: Date;
+  is_done?: boolean;
 };
 
 const db_setting = {
@@ -39,7 +40,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World API!");
 });
 
-app.get("/groups/", async (req: Request, res: Response) => {
+app.post("/groups/", async (req: Request, res: Response) => {
   let connection: mysql.Connection | undefined;
   try {
     const user_id = req.body.user_id;
@@ -58,7 +59,23 @@ app.get("/groups/", async (req: Request, res: Response) => {
       user_id: number;
     }[];
 
-    res.json(rows_result.map((row) => row.group_id));
+    const group_ids = rows_result.map((row) => row.group_id);
+    console.log(group_ids);
+    let groups: Group[] = [];
+    for (const group_id of group_ids) {
+      const [rows2, fields2] = await connection.execute(
+        "SELECT * FROM group_table WHERE group_id = (?)",
+        [group_id]
+      );
+      const rows_result2 = rows2 as unknown[] as {
+        group_id: number;
+        group_name: string;
+        detail: string;
+      }[];
+      groups.push(...rows_result2);
+    }
+    console.log(groups);
+    res.json(groups);
     res.statusCode = 200;
   } catch (err) {
     res.statusCode = 400;
@@ -69,7 +86,7 @@ app.get("/groups/", async (req: Request, res: Response) => {
   }
 });
 
-app.get("/get_todo_group/", async (req: Request, res: Response) => {
+app.post("/get_todo_group/", async (req: Request, res: Response) => {
   const body = req.body as { group_id: number };
   let connection: mysql.Connection | undefined;
   try {
@@ -97,22 +114,58 @@ app.get("/get_todo_group/", async (req: Request, res: Response) => {
   }
 });
 
-app.get("/get_todo_local/", async (req: Request, res: Response) => {
+app.post("/get_todo_local/", async (req: Request, res: Response) => {
   const body = req.body as { user_id: number };
   let connection: mysql.Connection | undefined;
   try {
     connection = await mysql.createConnection(db_setting);
+
+    // もう持っているToDo
     const [rows, fields] = await connection.execute(
-      "SELECT * FROM user_todo WHERE user_id = ?",
+      "SELECT * FROM user_todo INNER JOIN todos ON user_todo.todo_id = todos.todo_id WHERE user_id = ?",
       [body.user_id]
     );
-    const rows_result = rows as unknown[] as {
-      todo_id: number;
-      user_id: number;
-      status: boolean;
-    }[];
+    const rows_result = rows as unknown[] as Todo[];
 
-    res.json({ todos: rows_result.map((row) => row.todo_id) });
+    // まだ持ってないToDo
+    /* user_idが所属してるgroup_idを取得
+     * group_idからtodo_idを取得
+     */
+    const [rows2, fields2] = await connection.execute(
+      "SELECT * FROM user_group INNER JOIN todos ON user_group.group_id = todos.group_id WHERE user_id = ?",
+      [body.user_id]
+    );
+
+    // ここまでがgroupのもつtodo
+
+    // result[]にrows_resultを入れる。rows_result2はresult[]にtodo_idが一致する要素がなければ入れる.
+    // 一致する要素があれば入れない
+
+    const id_mapping = new Set<number>();
+    rows_result.forEach((row) => {
+      id_mapping.add(row.todo_id!);
+    });
+
+    console.log(rows2);
+    const rows_result2 = rows2 as unknown[] as Todo[];
+    // user_todoにinsert
+    for (const row of rows_result2) {
+      if (!id_mapping.has(row.todo_id!)) {
+        await connection.execute(
+          "INSERT INTO user_todo (user_id, todo_id, is_done) VALUES (?, ?, ?)",
+          [body.user_id, row.todo_id, false]
+        );
+      }
+    }
+
+    const result: Todo[] = rows_result;
+    rows_result2.forEach((row) => {
+      if (!id_mapping.has(row.todo_id!)) {
+        result.push(row);
+      }
+    });
+
+    res.json(result);
     res.statusCode = 200;
   } catch (err) {
     connection?.rollback();
@@ -123,7 +176,7 @@ app.get("/get_todo_local/", async (req: Request, res: Response) => {
     connection?.end();
   }
 });
-app.get("/todo_detail/", async (req: Request, res: Response) => {
+app.post("/todo_detail/", async (req: Request, res: Response) => {
   const body = req.body as { todo_id: number };
   let connection: mysql.Connection | undefined;
   try {
